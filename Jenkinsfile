@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    parameters {
-        string(name: 'DOCKER_USERNAME', defaultValue: 'parameswarankrishnan36@gmail.com', description: 'Docker Hub Username')
-    }
-
     stages {
         stage('Build') {
             steps {
@@ -12,8 +8,9 @@ pipeline {
                     // Checkout code from Git
                     checkout scm
 
-                    /ArgoCD_Projeco/ Build Docker image
-                    sh "docker build -t ${params.DOCKER_USERNAME}/nodejs-docker-jenkins-argo-project ."
+                    /ArgoCD_Project/ Build Docker image
+                    sh 'docker build -t parameswaran009/argocd-project /var/lib/jenkins/workspace/Docker build/ArgoCD_Project'
+
                 }
             }
         }
@@ -22,10 +19,12 @@ pipeline {
             steps {
                 script {
                     // Push the Docker image to Docker Hub
-                    sh "docker push ${params.DOCKER_USERNAME}/nodejs-docker-jenkins-argo-project"
+                    sh "docker push parameswaran009/argocd-project/nodejs-docker-jenkins-argo-project"
                 }
             }
         }
     }
 }
+
+
 
