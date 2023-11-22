@@ -12,8 +12,8 @@ pipeline {
                     // Checkout code from Git
                     checkout scm
 
-                    // Build Docker image
-                    sh "docker build -t ${params.DOCKER_USERNAME}/nodejs-docker-jenkins-argo ."
+                    /ArgoCD_Projeco/ Build Docker image
+                    sh "docker build -t ${params.DOCKER_USERNAME}/nodejs-docker-jenkins-argo-project ."
                 }
             }
         }
@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script {
                     // Push the Docker image to Docker Hub
-                    sh "docker push ${params.DOCKER_USERNAME}/nodejs-docker-jenkins-argo"
+                    sh "docker push ${params.DOCKER_USERNAME}/nodejs-docker-jenkins-argo-project"
                 }
             }
         }
