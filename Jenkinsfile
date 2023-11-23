@@ -11,6 +11,14 @@ pipeline {
             }
         }
 
+        stage('Verify Workspace') {
+            steps {
+                script {
+                    sh 'ls -l'
+                }
+            }
+        }
+
         stage('Build') {
             steps {
                 script {
