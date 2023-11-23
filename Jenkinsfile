@@ -25,7 +25,7 @@ pipeline {
                 dir("${env.JOB_BASE_NAME}") {
                     checkout([
                         $class: 'GitSCM',
-                        branches: [[name: '*/master']],
+                        branches: [[name: '*/man']],
                         doGenerateSubmoduleConfigurations: false,
                         extensions: [[$class: 'CleanCheckout']],
                         submoduleCfg: [],
