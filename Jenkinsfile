@@ -1,12 +1,20 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_IMAGE_NAME = "your-docker-username/nodejs-docker-image"
+        DOCKER_HUB_CREDENTIALS = 'your-dockerhub-credentials-id'
+        GIT_CREDENTIALS = 'git-credentials-id'
+    }
+
     stages {
         stage('Clone Repository') {
             steps {
                 script {
-                    // Checkout code from Git
-                    git 'https://github.com/Parameswaran009/ArgoCD_Project.git', branch: 'main'
+                    // Checkout code from Git with credentials
+                    withCredentials([usernamePassword(credentialsId: GIT_CREDENTIALS, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        git 'https://Parameswaran009:Parameswaran@123@github.com/Parameswaran009/ArgoCD_Project.git', branch: 'main'
+                    }
                 }
             }
         }
@@ -15,10 +23,12 @@ pipeline {
             steps {
                 script {
                     // Build Docker image
-                    dockerImage = docker.build("parameswaran009/argocd-project:${env.BUILD_ID}")
+                    def dockerImage = docker.build("${DOCKER_IMAGE_NAME}:${env.BUILD_ID}")
 
                     // Push the Docker image to Docker Hub
-                    dockerImage.push()
+                    docker.withRegistry('https://registry.hub.docker.com', DOCKER_HUB_CREDENTIALS) {
+                        dockerImage.push()
+                    }
                 }
             }
         }
