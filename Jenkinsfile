@@ -6,7 +6,7 @@ pipeline {
             steps {
                 script {
                     // Checkout code from Git
-                    git 'https://github.com/Parameswaran009/ArgoCD_Project.git'
+                    git 'https://github.com/Parameswaran009/ArgoCD_Project.git', branch: 'main'
                 }
             }
         }
