@@ -20,6 +20,29 @@ pipeline {
             }
         }
 
+        stage('Pull Source Code - clmn-admin-app') { // New Stage
+            steps {
+                dir("${env.JOB_BASE_NAME}") {
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: '*/master']],
+                        doGenerateSubmoduleConfigurations: false,
+                        extensions: [[$class: 'CleanCheckout']],
+                        submoduleCfg: [],
+                        userRemoteConfigs: [[credentialsId: 'Parameswaran009', url: 'https://github.com/Parameswaran009/ArgoCD_Project']]
+                    ])
+                    sh 'git rev-parse HEAD > commit'
+                    script {
+                        COMMIT_ID = sh(script: "git rev-parse HEAD", returnStdout: true).trim()
+                        echo "COMMIT_ID>>>: ${COMMIT_ID}"
+                        COMMIT_ID = "${COMMIT_ID}"
+                    }
+                    sh 'echo $COMMIT_ID'
+                    echo "$COMMIT_ID"
+                }
+            }
+        }
+
         stage('Build and Push Docker Image') {
             steps {
                 script {
