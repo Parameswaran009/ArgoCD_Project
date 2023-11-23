@@ -1,32 +1,30 @@
-pipeline {
-    agent any
+environment {
+    DOCKER_IMAGE_NAME = "parameswaran009/argocd-project"
+    DOCKER_HUB_CREDENTIALS = 'dockerhub-credentials-id'
+    GIT_CREDENTIALS = 'git-credentials-id'
+}
 
-    environment {
-        DOCKER_IMAGE_NAME = "your-docker-username/nodejs-docker-image"
-        DOCKER_HUB_CREDENTIALS = 'your-dockerhub-credentials-id'
-        GIT_CREDENTIALS = 'git-credentials-id'
-    }
-
-    stages {
-        stage('Clone Repository') {
-            steps {
-                script {
-                    // Checkout code from Git with credentials
-                    withCredentials([usernamePassword(credentialsId: GIT_CREDENTIALS, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        git credentialsId: 'git-credentials-id', url: 'https://github.com/Parameswaran009/ArgoCD_Project.git', branch: 'main'
-                    }
+stages {
+    stage('Clone Repository') {
+        steps {
+            script {
+                // Checkout code from Git with credentials
+                withCredentials([usernamePassword(credentialsId: GIT_CREDENTIALS, usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                    git credentialsId: 'git-credentials-id', url: 'https://github.com/Parameswaran009/ArgoCD_Project.git', branch: 'main'                
                 }
             }
         }
+    }
 
-        stage('Build and Push Docker Image') {
-            steps {
-                script {
-                    // Build Docker image
-                    def dockerImage = docker.build("${DOCKER_IMAGE_NAME}:${env.BUILD_ID}")
+    stage('Build and Push Docker Image') {
+        steps {
+            script {
+                // Build Docker image
+                def dockerImage = docker.build("${DOCKER_IMAGE_NAME}:${env.BUILD_ID}")
 
-                    // Push the Docker image to Docker Hub
-                    docker.withRegistry('https://registry.hub.docker.com', DOCKER_HUB_CREDENTIALS) {
+                // Push the Docker image to Docker Hub with credentials
+                withCredentials([usernamePassword(credentialsId: DOCKER_HUB_CREDENTIALS, usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
+                    docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_HUB_USERNAME', 'DOCKER_HUB_PASSWORD') {
                         dockerImage.push()
                     }
                 }
@@ -34,5 +32,4 @@ pipeline {
         }
     }
 }
-
 
