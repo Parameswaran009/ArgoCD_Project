@@ -2,15 +2,20 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Clone Repository') {
             steps {
                 script {
                     // Checkout code from Git
-                    checkout scm
+                    git 'https://github.com/Parameswaran009/ArgoCD_Project.git'
+                }
+            }
+        }
 
+        stage('Build') {
+            steps {
+                script {
                     // Build Docker image
                     sh 'docker build -t parameswaran009/argocd-project .'
-		    
                 }
             }
         }
@@ -25,3 +30,4 @@ pipeline {
         }
     }
 }
+
