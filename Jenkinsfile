@@ -5,6 +5,7 @@ pipeline {
         DOCKER_IMAGE_NAME = "parameswaran009/argocd-project"
         DOCKER_HUB_CREDENTIALS = 'dockerhub-credentials-id'
         GIT_CREDENTIALS = 'git-credentials-id'
+        GIT_TOOL = 'Default'
     }
 
     stages {
@@ -13,7 +14,7 @@ pipeline {
                 script {
                     // Checkout code from Git with credentials
                     withCredentials([usernamePassword(credentialsId: GIT_CREDENTIALS, usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                        git credentialsId: 'git-credentials-id', url: 'https://parameswaran009:Parameswaran@123@github.com/Parameswaran009/ArgoCD_Project.git', branch: 'main'
+                        git tool: GIT_TOOL, credentialsId: 'git-credentials-id', url: 'https://parameswaran009:Parameswaran@123@github.com/Parameswaran009/ArgoCD_Project.git', branch: 'main'
                     }
                 }
             }
