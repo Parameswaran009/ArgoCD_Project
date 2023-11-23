@@ -13,7 +13,7 @@ pipeline {
                 script {
                     // Checkout code from Git with credentials
                     withCredentials([usernamePassword(credentialsId: GIT_CREDENTIALS, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        git 'https://Parameswaran009:Parameswaran@123@github.com/Parameswaran009/ArgoCD_Project.git', branch: 'main'
+                        git credentialsId: 'git-credentials-id', url: 'https://github.com/Parameswaran009/ArgoCD_Project.git', branch: 'main'
                     }
                 }
             }
