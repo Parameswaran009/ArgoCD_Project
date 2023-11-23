@@ -11,28 +11,14 @@ pipeline {
             }
         }
 
-        stage('Verify Workspace') {
-            steps {
-                script {
-                    sh 'ls -l'
-                }
-            }
-        }
-
-        stage('Build') {
+        stage('Build and Push Docker Image') {
             steps {
                 script {
                     // Build Docker image
-                    sh 'docker build -t parameswaran009/argocd-project .'
-                }
-            }
-        }
+                    dockerImage = docker.build("parameswaran009/argocd-project:${env.BUILD_ID}")
 
-        stage('Push to Docker Registry') {
-            steps {
-                script {
                     // Push the Docker image to Docker Hub
-                    sh 'docker push parameswaran009/argocd-project'
+                    dockerImage.push()
                 }
             }
         }
